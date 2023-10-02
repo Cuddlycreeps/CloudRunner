@@ -1,0 +1,145 @@
+[gd_scene load_steps=21 format=3 uid="uid://d3fj45l8joeg6"]
+
+[ext_resource type="Script" path="res://scripts/crow.gd" id="1_f78po"]
+[ext_resource type="Texture2D" uid="uid://dkntnyojtc81t" path="res://assets/art/crow_death-sheet.png" id="1_i0bdc"]
+[ext_resource type="Texture2D" uid="uid://camt8lha1opf5" path="res://assets/art/crow_idle-sheet.png" id="1_ntrhe"]
+[ext_resource type="Texture2D" uid="uid://ti0h63a3jthm" path="res://assets/art/crow_walk-sheet.png" id="3_xcxln"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xfhi8"]
+radius = 15.0
+height = 68.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pxwfo"]
+atlas = ExtResource("1_i0bdc")
+region = Rect2(0, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jartu"]
+atlas = ExtResource("1_i0bdc")
+region = Rect2(160, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hh11m"]
+atlas = ExtResource("1_i0bdc")
+region = Rect2(320, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6dhik"]
+atlas = ExtResource("1_i0bdc")
+region = Rect2(480, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yvbf0"]
+atlas = ExtResource("1_i0bdc")
+region = Rect2(640, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vlfng"]
+atlas = ExtResource("1_i0bdc")
+region = Rect2(800, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mtls6"]
+atlas = ExtResource("1_ntrhe")
+region = Rect2(0, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_olygk"]
+atlas = ExtResource("1_ntrhe")
+region = Rect2(160, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ec31"]
+atlas = ExtResource("1_ntrhe")
+region = Rect2(320, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5j2xt"]
+atlas = ExtResource("1_ntrhe")
+region = Rect2(480, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q0vq8"]
+atlas = ExtResource("3_xcxln")
+region = Rect2(0, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4or7u"]
+atlas = ExtResource("3_xcxln")
+region = Rect2(160, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_32m86"]
+atlas = ExtResource("3_xcxln")
+region = Rect2(320, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6kidi"]
+atlas = ExtResource("3_xcxln")
+region = Rect2(480, 0, 160, 160)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fam4y"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pxwfo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jartu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hh11m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6dhik")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yvbf0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vlfng")
+}],
+"loop": true,
+"name": &"death",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_mtls6")
+}, {
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_olygk")
+}, {
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_3ec31")
+}, {
+"duration": 3.0,
+"texture": SubResource("AtlasTexture_5j2xt")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q0vq8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4or7u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_32m86")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6kidi")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[node name="crow" type="Area2D" groups=["Enemy"]]
+collision_layer = 4
+collision_mask = 11
+script = ExtResource("1_f78po")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
+shape = SubResource("CapsuleShape2D_xfhi8")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_fam4y")
+animation = &"walk"
+autoplay = "idle"
+flip_h = true
+
+[node name="DeathAnimationTimer" type="Timer" parent="."]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
