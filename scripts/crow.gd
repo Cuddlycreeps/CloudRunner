@@ -2,6 +2,7 @@ extends Area2D
 
 @export var path_follow : PathFollow2D
 @export var speed : float = 0.0025
+@export var level_script_node : Node
 @onready var animated_sprite_2d = $AnimatedSprite2D
 
 
@@ -35,7 +36,7 @@ func start_death_animation_timer():
 
 func _on_body_entered(body):
 	if body.is_in_group("Player") and is_alive:
-		get_tree().change_scene_to_file("res://scenes/level.tscn")
+		level_script_node.reset_level()
 
 func _on_dash_projectile_area_shape_entered(area_rid, area, area_shape_index, local_shape_index):
 	if is_alive:

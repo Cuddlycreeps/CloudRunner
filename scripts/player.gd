@@ -18,6 +18,8 @@ var is_dashable : bool = true
 var dash_timer = Timer.new()
 var dash_cd_timer = Timer.new()
 
+@export var level_script_node : Node
+
 
 @onready var animations = $AnimatedSprite2D
 @onready var jump_vocal_1 = $jump_vocal_1
@@ -44,7 +46,8 @@ func _physics_process(delta):
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y += gravity * delta
-
+	# Handle Movement. 
+	velocity.x = SPEED 
 	# Handle Jump.
 	if Input.is_action_pressed("jump") and is_on_floor():
 			first_jump_press = true
@@ -61,12 +64,6 @@ func _physics_process(delta):
 		velocity.y = DOUBLE_JUMP_VELOCITY
 		jump_sound()
 		can_double_jump = false
-	# Get the input direction and handle the movement/deceleration.
-	var direction = Input.get_axis("left", "right")
-	if direction:
-		velocity.x = direction * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
 	# Handle Dash.
 	if Input.is_action_pressed("dash") and !is_dashing and is_dashable:
 		is_dashing = true
@@ -84,6 +81,11 @@ func _physics_process(delta):
 	if is_on_floor():
 		can_double_jump = true
 		jump_time = 0
+	# Check if the player is moving.
+	var last_position = position
+	await get_tree().create_timer(0.3).timeout
+	if last_position == position:
+		level_script_node.reset_level()
 
 func _on_dash_cd_timer_timeout():
 	is_dashable = true

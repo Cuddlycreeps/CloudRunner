@@ -1,19 +1,9 @@
 extends Node2D
 
-
-func _on_win_area_body_entered(body):
-	if body.is_in_group("Player"):
-		#show_message("You win!")
-		get_tree().change_scene_to_file("res://scenes/level.tscn")
-
-
-func _on_death_area_body_entered(body):
-	if body.is_in_group("Player"):
-		#show_message("You died!")
-		get_tree().change_scene_to_file("res://scenes/level.tscn")
-
 # The player node.
 @onready var player = $Player
+# The tile map node.
+@onready var tile_map = $TileMap
 
 # The parallax layers.
 @export var layer1 : ParallaxLayer
@@ -29,10 +19,31 @@ func _on_death_area_body_entered(body):
 @export var factor4 = 0.4
 @export var factor5 = 0.5
 
+# player position
+var player_position_as_tile
+
+func _on_win_area_body_entered(body):
+	if body.is_in_group("Player"):
+		#show_message("You win!")
+		reset_level()
+
+
+func _on_death_area_body_entered(body):
+	if body.is_in_group("Player"):
+		#show_message("You died!")
+		reset_level()
+
+func reset_level():
+	get_tree().change_scene_to_file("res://scenes/level.tscn")
+
 func _process(delta):
+	# Get the player's position as a tile. TODO implement map randomized map generation
+	player_position_as_tile = tile_map.local_to_map(player.position)
+	# and print it to the console.
+	print("Player position: " + str(player_position_as_tile.x) + ", " + str(player_position_as_tile.y))
+
 	# Calculate the parallax offset based on the player's position.
 	var offset = -player.position.x / 1000
-
 	# Apply the parallax offset to each layer.
 	layer1.position.x = offset * factor1
 	layer2.position.x = offset * factor2
@@ -40,7 +51,7 @@ func _process(delta):
 	layer4.position.x = offset * factor4
 	layer5.position.x = offset * factor5
 
-#Doesnt work
+#Doesnt work yet
 #func show_message(message: String):
 #	var label = Label.new()
 #	label.text = message
